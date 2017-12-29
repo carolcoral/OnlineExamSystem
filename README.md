@@ -5,9 +5,9 @@
 
   ## Main(入口)
      
-  >1.[ServerMain.java](https://github.com/carolcoral/OnlineExamSystem/blob/master/ServerOnlineExamSystem/main/ServerMain.java)
+  >1.[ServerMain.java](https://github.com/carolcoral/OnlineExamSystem/blob/master/ServerOnlineExamSystem/main/ServerMain.java)
           
-  >2.[ServerThread.java](https://github.com/carolcoral/OnlineExamSystem/blob/master/ServerOnlineExamSystem/main/ServerThread.java)
+  >2.[ServerThread.java](https://github.com/carolcoral/OnlineExamSystem/blob/master/ServerOnlineExamSystem/main/ServerThread.java)
 
   ## DAO(数据层)
   
