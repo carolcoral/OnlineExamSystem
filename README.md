@@ -18,8 +18,8 @@
   >3.[UserDaoImp.java](https://github.com/carolcoral/OnlineExamSystem/blob/master/ServerOnlineExamSystem/dao/UserDaoImp.java)
    
   >4.[UserDaoService.java](https://github.com/carolcoral/OnlineExamSystem/blob/master/ServerOnlineExamSystem/dao/UserDaoService.java)
-     
-  ## Model(模型层)
+  
+  ## Model(模型层)
   
   >1.[Exam.java](https://github.com/carolcoral/OnlineExamSystem/blob/master/ServerOnlineExamSystem/model/Exam.java) 试卷实体类
   
