@@ -1,13 +1,21 @@
 package cn.xdl.exam.dao;
 
+import java.awt.Window.Type;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.LinkedList;
 
+import org.omg.PortableServer.ID_ASSIGNMENT_POLICY_ID;
+
+import cn.xdl.exam.main.ServerThread;
 import cn.xdl.exam.model.Exam;
 import cn.xdl.exam.model.Grade;
+import cn.xdl.exam.model.Test;
 import cn.xdl.exam.model.User;
 import cn.xdl.exam.util.DBUtils;
+import oracle.net.aso.a;
 
 public class UserDaoImp implements UserDao {
 
@@ -32,11 +40,11 @@ public class UserDaoImp implements UserDao {
 			// 3.处理结果集
 			rs = pst.executeQuery();
 			if (rs.next()) {
-				System.out.println("find");
+				System.out.println("查找成功！存在该数据！");
 				// 封装查询到的用户数据
-				int id = rs.getInt("id");// 不用返回该数据展示给用户
-				String uname = rs.getString("uname");
-				String upwd = rs.getString("upwd");
+				int id = rs.getInt("user_id");// 不用返回该数据展示给用户
+				String uname = rs.getString("user_name");
+				String upwd = rs.getString("user_passwd");
 				boolean isManager = rs.getBoolean("ismanager");
 				return new User(id, uname, upwd, isManager);
 			}
@@ -160,7 +168,8 @@ public class UserDaoImp implements UserDao {
 			conn = DBUtils.getConnection();
 
 			pst = conn.prepareStatement(SQL_UPDATE_USERPASSWD);
-			String update_uname = User.getUname();
+			// String update_uname = UserDaoService.login(user);
+			String update_uname = "user";
 			pst.setString(1, user_passwd);
 			pst.setString(2, update_uname);
 			// 3.处理结果集
@@ -189,7 +198,7 @@ public class UserDaoImp implements UserDao {
 		try {
 			// 1.获取数据库连接对象
 			conn = DBUtils.getConnection();
-			int userid = UserDaoService.queryUser(User.getUname()).getUid();
+			int userid = UserDaoService.queryUser().getUid();
 			pst = conn.prepareStatement(SQL_QUERY_USERPGRADE);
 			pst.setInt(1, User_Grade_Id);
 			pst.setInt(1, userid);
@@ -204,15 +213,59 @@ public class UserDaoImp implements UserDao {
 		return new Grade();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc) 考生考试 随机从数据库中获取10条试题数据 保存获取的试题数据的 test_id 在 test_ids 中
+	 * 保存当前考试用户的 user_id 在 grade 成绩表中的 user_id 中 保存考试结束后计算的成绩结果在 grade 中的
+	 * 获取当前保存后的成绩表中的 grade_id 保存在 exam 中的 grade_id 中 exam_name 的命名规则是：用户名
+	 * user_name + 试卷的 id 值 exam_id
+	 * 
 	 * @see cn.xdl.exam.dao.UserDao#stratUserExam(cn.xdl.exam.model.Exam)
 	 */
 	@Override
-	public Exam stratUserExam(Exam startUserExam) {
+	public String stratUserExam(String startUserExam) {
+		Connection conn = null;
+		PreparedStatement pst = null;
+		try {
+			if (startUserExam.equals("startExam")) {
+				// 1.获取数据库连接对象
+				conn = DBUtils.getConnection();
+				pst = conn.prepareStatement(SQL_QUERY_USER_EXAM_RAND);
+				int Testdif = 3;
+				int Testcount = 10;
+				pst.setInt(1, Testdif);// 试题难度，为了便于测试，这里使用固定值3，表示简单（1：难，2：中等，3：简单）
+				pst.setInt(2, Testcount);// 试题数量，需要随机查询出的试题的数量大小
+				// 3.处理结果集
+				ResultSet res = pst.executeQuery();
+				while (res.next()) {
+					int testId = res.getInt("test_id");
+					String testContent = res.getString("testContent");
+					String testAnswer = res.getString("testAnswer");
+					int testDiffic = res.getInt("testDiffic");
+					System.out.println("读取到的试题是：" + "[题号：" + testId + ",试题内容：" + testContent + ",试题答案：" + testAnswer + ",试题难度：" + testDiffic + "]");
+					return testContent;// 返回试题的问题主体
+				}
+				// 4.释放资源
+			} else {
+				return ("参数错误，无法开始考试！");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			DBUtils.close(conn, pst, null);
+		}
+		return ("参数错误，无法开始考试！");
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see cn.xdl.exam.dao.UserDao#loginUserInfoByUserName(java.lang.String,
+	 * java.lang.String)
+	 */
+	@Override
+	public User loginUserInfoByUserName(String username, String userpasswd) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
-	
 
 }
