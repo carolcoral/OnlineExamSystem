@@ -11,16 +11,17 @@ public class UserDaoService {
 	 * @param user
 	 * @return
 	 */
-	@SuppressWarnings("static-access")
-	public static boolean login(User user) {
-		System.out.println("登陆的用户：" + user);
+	public static User login(User user) {
+		// System.out.println("登陆的用户：" + user);
 		User queryUser = UserDaoFactory.instanceUserDao().queryUserInfoByUserName(user.getUname());
 		System.out.println("查询到的用户：" + queryUser);
 		// 验证
 		if (user.equals(queryUser)) {
-			return true;// 登陆成功
+			return queryUser;// 登陆成功
+		} else {
+			System.out.println("登录失败！");// 登陆失败
 		}
-		return false;// 登陆失败
+		return queryUser;
 	}
 
 	/**
@@ -39,7 +40,6 @@ public class UserDaoService {
 	 * @param delteUser
 	 * @return
 	 */
-	@SuppressWarnings("static-access")
 	public static boolean deleteUser(String deleteUser) {
 		User deleteUser1 = UserDaoFactory.instanceUserDao().queryUserInfoByUserName(deleteUser);
 		// 验证
@@ -72,7 +72,6 @@ public class UserDaoService {
 	 * @param queryUser
 	 * @return
 	 */
-	@SuppressWarnings("static-access")
 	public static User queryUser(String queryUser) {
 		User queryUser1 = UserDaoFactory.instanceUserDao().queryUserInfoByUserName(queryUser);
 		// 验证
@@ -83,14 +82,14 @@ public class UserDaoService {
 		System.out.println("查询失败！");// 查询失败
 		return queryUser1;
 	}
-	
+
 	/**
 	 * 查询用户信息
 	 * 
 	 * @param queryUser
 	 * @return
 	 */
-	public static  boolean updateUserPasswd(String updateUserPasswd) {
+	public static boolean updateUserPasswd(String updateUserPasswd) {
 		boolean updateUserPaswd = UserDaoFactory.instanceUserDao().updateUserPasswd(updateUserPasswd);
 		// 验证
 		if (updateUserPaswd) {
@@ -100,14 +99,14 @@ public class UserDaoService {
 		System.out.println("修改密码失败！");// 查询失败
 		return false;
 	}
-	
+
 	/**
 	 * 查询用户成绩
 	 * 
 	 * @param queryUserGrade
 	 * @return
 	 */
-	public static  Grade queryUserGrade(int User_Grade_Id) {
+	public static Grade queryUserGrade(int User_Grade_Id) {
 		Grade queryUserGrade = UserDaoFactory.instanceUserDao().queryUserGrade(User_Grade_Id);
 		// 验证
 		if (User_Grade_Id == queryUserGrade.getGrade_id()) {
@@ -116,6 +115,34 @@ public class UserDaoService {
 		}
 		System.out.println("查询成绩失败！");// 查询失败
 		return new Grade();
+	}
+
+	/**
+	 * 考生权限 开始考试
+	 * 
+	 * @param reString
+	 *            == "startExam"
+	 * @return
+	 */
+	public static String startExam(String reString) {
+		String userExamTestQuestion = UserDaoFactory.instanceUserDao().stratUserExam(reString);
+		if (userExamTestQuestion != null) {
+			System.out.println("返回的试题的问题是：" + userExamTestQuestion);
+			return userExamTestQuestion;
+		} else {
+			return "试题查询失败！";
+		}
+	}
+
+	/**
+	 * 验证考生发送回来的答案的
+	 * 
+	 * @param resAnswer
+	 * @return
+	 */
+	public static String checkExam(String resAnswer) {
+		String resAnswers = UserDaoFactory.instanceUserDao().checkUserExamTest(resAnswer);
+		return null;
 	}
 
 }
