@@ -22,7 +22,7 @@ public class ClientMain {
 	public static void main(String[] args) {
 		try {
 			// 1.创建socket对象，连接服务器
-			clientSocket = new Socket("192.168.0.12", 8888);
+			clientSocket = new Socket("192.168.10.4", 8888);
 			// 2.获取流对象
 			oos = new ObjectOutputStream(clientSocket.getOutputStream());
 			ois = new ObjectInputStream(clientSocket.getInputStream());
@@ -50,6 +50,7 @@ public class ClientMain {
 	private static void managerOper() {
 		// 1.登陆页面
 		User mUser = ViewUtil.managerLoginView();
+		// System.out.println("mUser = " + mUser);
 		// 2.封装管理员信息对象，封装请求对象sendMsg
 		sendMsg.put("type", "1");
 		sendMsg.put("userInfo", mUser);
@@ -67,7 +68,8 @@ public class ClientMain {
 				int selectNum = ViewUtil.managerListView();
 				switch (selectNum) {
 				case 0:// 退出
-					return;
+					System.exit(0);
+					break;
 				case 1:// add 添加学生信息
 					User addStudent = ViewUtil.addStudentView();
 					// 封装
@@ -215,6 +217,7 @@ public class ClientMain {
 				switch (selectNum) {
 				case 0:// 退出
 					System.exit(0);
+					// ViewUtil.welcomeView();
 					break;
 				case 1:// updatePasswd 修改当前用户密码
 					String updateUserPasswd = ViewUtil.updateUserPasswd();
@@ -262,8 +265,23 @@ public class ClientMain {
 				case "2011":// 修改用户密码
 					System.out.println("修改密码失败！");
 					break;
-				case "2002":// 开始考试
+				case "2002":// 开始考试 简单考试版本，每完成一道题进行验证同时显示结果
+					// for (int i = 1; i <= 10; i++) {
+					String resQuestion = (String) receiveMsg.get("userInfo");
+					System.out.println("第" + "1" + "题是：" + resQuestion);
+					String resExamTest = ViewUtil.joinExam();
+					sendMsg.put("type", "2222");// 发送类型，请求服务器验证答案
+					sendMsg.put("userInfo", resExamTest);// 发送答案，在服务端验证答案并返回
+					String startUserExam = ViewUtil.startExam();
+					// 封装
+					sendMsg.put("type", "22");
+					sendMsg.put("userInfo", startUserExam);
+					// }
 					System.out.println("考试结束！");
+					break;
+				case "2022":// 开始考试失败
+					System.out.println("开始考试失败！请联系管理员！");
+					studentOper();
 					break;
 				case "2003":// 查询用户成绩成功
 					System.out.println("查询成绩成功");
