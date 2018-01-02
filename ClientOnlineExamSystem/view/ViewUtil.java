@@ -8,7 +8,7 @@ public class ViewUtil {
 	/*
 	 * 当输入用户名小于该值后重新返回输入界面 控制用户名长度的可操作大小 return USER_LENGTH_NUM
 	 */
-	public static final int USER_LENGTH_NUM = 4;
+	public static final int USER_LENGTH_NUM = 1;
 	/*
 	 * 当输入试题内容小于该值后重新返回输入界面 控制内容长度的可操作大小 return TEST_LENGTH_NUM
 	 */
@@ -51,24 +51,26 @@ public class ViewUtil {
 		System.out.println("\t请输入密码：");
 		String upwd = sc.next();
 		System.out.println("**********************************************");
-		if (uname.length() < 6) {
+		if (uname.length() < USER_LENGTH_NUM) {// 当用户名长度小于该值的时候返回登录界面
+			System.out.println("对不起！您登录的用户名长度不正确！");
 			return managerLoginView();
 		}
 		User user = new User(uname, upwd, true);
+		// System.out.println("user = "+user);
 		return user;
 	}
 
 	// 考生登录成功欢迎界面
 	public static User studentLoginView() {
 		System.out.println("---------------------------------------------");
-		System.out.println("----\t欢迎考生使用本考试系统      \t--------------------");
+		System.out.println("----\t欢迎考生使用本考试系统\t--------------------");
 		System.out.println("----\t请输入用户名：\t -------------------");
 		String uname = sc.next();
 
 		System.out.println("----\t请输入密码：\t -------------------");
 		String upwd = sc.next();
 		System.out.println("----\t请根据提示进行相应的操作\t-------------------");
-		if (uname.length() < 6) {
+		if (uname.length() < USER_LENGTH_NUM) {
 			return managerLoginView();
 		}
 		User user = new User(uname, upwd, false);
@@ -101,7 +103,7 @@ public class ViewUtil {
 		} catch (Exception e) {
 			return welcomeView();
 		}
-		if (type != 1 && type != 2 && type != 3) {
+		if (type < 0 && type > 9) {
 			return welcomeView();
 		}
 		return type;
@@ -129,7 +131,7 @@ public class ViewUtil {
 		} catch (Exception e) {
 			return welcomeView();
 		}
-		if (type != 1 && type != 2 && type != 3) {
+		if (type < 0 && type > 5) {
 			return welcomeView();
 		}
 		return type;
@@ -143,16 +145,16 @@ public class ViewUtil {
 	public static User addStudentView() {
 		System.out.println("**********************************************");
 		System.out.println("\t欢迎管理员使用本考试系统");
-		
+
 		System.out.println("\t请输入新的用户名：");
 		String uname = sc.next();
 
 		System.out.println("\t请输入密码：");
 		String upwd = sc.next();
-		
+
 		System.out.println("\t是否是管理员（true/false）：");
 		boolean isManager = sc.nextBoolean();
-		
+
 		System.out.println("**********************************************");
 		if (uname.length() < USER_LENGTH_NUM) {
 			return addStudentView();
@@ -334,6 +336,18 @@ public class ViewUtil {
 		System.out.println("\t开始考试！");
 		String start_exam = "startExam";// 返回一个值，当该值等于客户端的要求时执行程序
 		return start_exam;
+	}
+
+	/**
+	 * 考生的功能列表视图 考试ing
+	 * 
+	 * @return 考生选择的功能模块
+	 */
+	public static String joinExam() {
+		System.out.println("**********************************************");
+		System.out.println("\t请输入您的答案：");
+		String resExam = sc.next();
+		return resExam;
 	}
 
 	/**
