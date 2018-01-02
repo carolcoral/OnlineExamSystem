@@ -1,6 +1,5 @@
 package cn.xdl.exam.dao;
 
-import cn.xdl.exam.model.Exam;
 import cn.xdl.exam.model.Grade;
 import cn.xdl.exam.model.User;
 
@@ -24,7 +23,7 @@ interface UserDao {
 	 *            需要添加的用户对象
 	 * @return 查询结果，true:添加成功
 	 */
-	public static final String SQL_INSERT_USERINFO = "insert into user(user_name,user_passwd,isManager,user_addtime) values(?,?,?,sysdate)";
+	public static final String SQL_INSERT_USERINFO = "insert into user(user_name,user_passwd,isManager,user_addtime) values(?,?,?,sysdate())";
 
 	public boolean insertUserInfo(User insertUser);
 
@@ -46,9 +45,20 @@ interface UserDao {
 	 *            需要添加的用户对象
 	 * @return 查询结果，true:添加成功
 	 */
-	public static final String SQL_UPDATE_USERINFO = "update user(user_name,user_passwd,isManager,user_addtime) set values(?,?,?,sysdate) where user_name = ?";
+	public static final String SQL_UPDATE_USERINFO = "update user(user_name,user_passwd,isManager,user_addtime) set values(?,?,?,sysdate()) where user_name = ?";
 
 	public User updateUser(User updateUser);
+
+	/**
+	 * 全员操作 通过用户名和密码验证登录信息
+	 * 
+	 * @param user_name
+	 *            user_passwd 需要查询的用户的用户名和密码
+	 * @return 查询结果，或者null
+	 */
+	public static final String SQL_LOGIN_USERINFO_BY_USERNAME = "select * from user where user_name = ? and user_passwd = ?";
+
+	public User loginUserInfoByUserName(String username, String userpasswd);
 
 	/**
 	 * 管理员操作 通过用户名查询考生数据
@@ -57,7 +67,7 @@ interface UserDao {
 	 *            需要查询的用户的用户名
 	 * @return 查询结果，或者null
 	 */
-	public static final String SQL_QUERY_USERINFO_BY_USERNAME = "select * from user where user_name=?";
+	public static final String SQL_QUERY_USERINFO_BY_USERNAME = "select * from user where user_name = ? ";
 
 	public User queryUserInfoByUserName(String username);
 
@@ -93,11 +103,17 @@ interface UserDao {
 	 * @return 查询结果，或者null
 	 */
 	// 获取题目
-	public static final String SQL_QUERY_USER_EXAM_RAND = "select t.testContent,t.testAnswer,t.testDiffic from test t where t.test_id>=((select MAX(t.test_id) from test t) - (select MIN(t.test_id) from test t))* RAND() + (select MIN(t.test_id) from test t)  and t.testDiffic = ? limit ?";
+	public static final String SQL_QUERY_USER_EXAM_RAND = "select t.test_id,t.testContent,t.testAnswer,t.testDiffic from test t where t.test_id>=((select MAX(t.test_id) from test t) - (select MIN(t.test_id) from test t))* RAND() + (select MIN(t.test_id) from test t) and t.testDiffic = ? limit ?";
 
 	// 把获取的题目的 test_id 插入到 exam 表中的test_ids 中
 	public static final String SQL_INSERT_USER_EXAM_IDS = "";
 
-	public Exam stratUserExam(Exam startUserExam);
+	public String stratUserExam(String reString);
+
+	/**
+	 * @param resAnswer
+	 * @return
+	 */
+	public String checkUserExamTest(String resAnswer);
 
 }
