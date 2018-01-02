@@ -48,7 +48,7 @@ public class ServerThread implements Runnable {
 	/**
 	 * 接收客户端请求，并且处理
 	 */
-	@SuppressWarnings({ "unchecked", "static-access" })
+	@SuppressWarnings({ "unchecked" })
 	private void receiveMessage() {
 		System.out.println("receiveMessage");
 		try {
@@ -67,13 +67,15 @@ public class ServerThread implements Runnable {
 				// 1.获取用户登陆信息
 				User user = (User) receiveMsg.get("userInfo");
 				// 2.判断用户是否能登陆
-				if (UserDaoService.login(user)) {
+				// System.out.println("传入的参数是：" + user);
+				// if ("admin".equals(user.getUname())) {
+				if (UserDaoService.login(user).getUname().equals(user.getUname())) {
 					// 3.封装结果数据
 					sendMsg.put("type", "1001");
+					// User ResUser = UserDaoService.login(user);
 				} else {
 					sendMsg.put("type", "1002");
 				}
-
 				break;
 
 			// 用户操作返回值部分
@@ -89,7 +91,28 @@ public class ServerThread implements Runnable {
 				}
 				break;
 			case "22":// 考试
-
+				String reString = (String) receiveMsg.get("userInfo");
+				if (reString.equals("startExam")) {
+					String resExamQuestion = UserDaoService.startExam(reString);
+					if (resExamQuestion != null) {
+						sendMsg.put("type", "2002");
+						sendMsg.put("userInfo", resExamQuestion);
+						System.out.println(resExamQuestion);
+					} else {
+						sendMsg.put("type", "2022");
+					}
+				}
+				break;
+			case "2222":// 考试
+				String resAnswer = (String) receiveMsg.get("userInfo");
+				if (resAnswer != null) {
+					String resExamQuestion = UserDaoService.checkExam(resAnswer);
+					if (resExamQuestion != null) {
+						sendMsg.put("type", "2002");
+						sendMsg.put("userInfo", resExamQuestion);
+					}
+					sendMsg.put("type", "2022");
+				}
 				break;
 			case "23":// 查询成绩
 				int queryUserGradeId = (int) receiveMsg.get("userInfo");
