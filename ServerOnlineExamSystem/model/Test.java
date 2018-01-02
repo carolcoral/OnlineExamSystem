@@ -2,16 +2,16 @@ package cn.xdl.exam.model;
 
 /**
  * 
- * ÏîÄ¿Ãû³Æ£ºClientOnlineExamSystem ÀàÃû³Æ£ºTest ÀàÃèÊö£ºÊÔÌâ£ºÊÔÌâĞòºÅ£¬ÊÔÌâÄÚÈİ£¬ÊÔÌâ´ğ°¸£¬ÊÔÌâÄÑÒ×¶È ´´½¨ÈË£ºCarol
- * ´´½¨Ê±¼ä£º2017Äê12ÔÂ28ÈÕ ÏÂÎç4:18:06
+ * é¡¹ç›®åç§°ï¼šClientOnlineExamSystem ç±»åç§°ï¼šTest ç±»æè¿°ï¼šè¯•é¢˜ï¼šè¯•é¢˜åºå·ï¼Œè¯•é¢˜å†…å®¹ï¼Œè¯•é¢˜ç­”æ¡ˆï¼Œè¯•é¢˜éš¾æ˜“åº¦ åˆ›å»ºäººï¼šCarol
+ * åˆ›å»ºæ—¶é—´ï¼š2017å¹´12æœˆ28æ—¥ ä¸‹åˆ4:18:06
  * 
  * @version
  */
 public class Test {
-	// private int Test_id;//ÊÔÌâĞòºÅ
-	private String testContent;// ÊÔÌâÄÚÈİ
-	private String testAnswer;// ÊÔÌâ´ğ°¸
-	private String testDiffic;// ÊÔÌâÄÑÒ×¶È 1 ÄÑ 2 ÖĞµÈ 3 ¼òµ¥
+	 private int Test_id;//è¯•é¢˜åºå·
+	private String testContent;// è¯•é¢˜å†…å®¹
+	private String testAnswer;// è¯•é¢˜ç­”æ¡ˆ
+	private String testDiffic;// è¯•é¢˜éš¾æ˜“åº¦ 1 éš¾ 2 ä¸­ç­‰ 3 ç®€å•
 
 	public Test(String testContent, String testAnswer, String testDiffic) {
 		super();
@@ -20,12 +20,13 @@ public class Test {
 		setTestAnswer(testAnswer);
 	}
 
-	// public int getTest_id() {
-	// return Test_id;
-	// }
-	// public void setTest_id(int test_id) {
-	// Test_id = test_id;
-	// }
+	public int getTest_id() {
+		return Test_id;
+	}
+
+	public void setTest_id(int test_id) {
+		Test_id = test_id;
+	}
 	public String getTestContent() {
 		return testContent;
 	}
